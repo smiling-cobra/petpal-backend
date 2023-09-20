@@ -1,0 +1,16 @@
+{
+  "name": "petpal-be",
+  "version": "1.0.0",
+  "description": "PetPal backend application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Jenya Golovnov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.1.0"
+  }
+}
