@@ -1,8 +1,16 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://cluster22137.0deohmn.mongodb.net', {
+const dbUsername = process.env.DATABASE_USERNAME;
+const dbPassword = process.env.DATABASE_PASSWORD;
+
+mongoose.connect('mongodb+srv://cluster22137.0deohmn.mongodb.net/petpaldb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    auth: {
+        username: dbUsername,
+        password: dbPassword,
+      },
 });
 
 const db = mongoose.connection;

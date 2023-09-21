@@ -10,4 +10,8 @@ const userSchema = new mongoose.Schema({
 // Create a user model based on the schema
 const User = mongoose.model('User', userSchema);
 
+// Define other user-related routes, such as login, profile updates, etc.
+// router.post('/login', userController.loginUser);
+// router.put('/profile', userController.updateUserProfile);
+
 module.exports = User;
