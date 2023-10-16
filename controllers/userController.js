@@ -27,3 +27,26 @@ exports.registerUser = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+exports.loginUser = async (req, res) => {
+    try {
+        const { password, email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ error: 'User not found' });
+        }
+
+        const isPasswordValid = await user.comparePassword(password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+
+        const token = generateToken(user);
+        res.status(200).json({ message: 'Logged in successfully', token });
+    } catch (e) {
+        console.error('Error log in user:', e);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

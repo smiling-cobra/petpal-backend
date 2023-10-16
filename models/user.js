@@ -1,6 +1,7 @@
 const mongoose = require('./mongoose');
+const bcrypt = require('bcrypt');
 
-// Define a user schema
+// User schema
 const userSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username: { type: String, required: true, unique: true },
@@ -8,11 +9,12 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
 });
 
+userSchema.methods.comparePassword = async function (candidatePassword) {
+    const user = this;
+    return bcrypt.compare(candidatePassword, user.password);
+}
+ 
 // Create a user model based on the schema
 const User = mongoose.model('User', userSchema);
-
-// Define other user-related routes, such as login, profile updates, etc.
-// router.post('/login', userController.loginUser);
-// router.put('/profile', userController.updateUserProfile);
 
 module.exports = User;
