@@ -4,7 +4,8 @@
   "description": "PetPal backend application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha 'test/**/*.test.js'"
   },
   "author": "Jenya Golovnov",
   "license": "ISC",
@@ -15,6 +16,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.2",
-    "nodemailer": "^6.9.6"
+    "nodemailer": "^6.9.6",
+    "mocha": "^10.0.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "sinon": "^11.1.1"
   }
 }
