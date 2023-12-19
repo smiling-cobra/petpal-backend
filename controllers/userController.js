@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
+const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
+const NODEMAILER_PASSWORD = process.env.NODEMAILER_PASSWORD;
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -56,14 +58,14 @@ exports.loginUser = async (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: '93ave.blues@gmail.com', // Your email address
-        pass: '', // Your password
+        user: NODEMAILER_EMAIL, // Your email address
+        pass: NODEMAILER_PASSWORD, // Your password
     },
 });
 
-const sendPasswordRestEmail = (recipientEmail, resetToken) => {
+const sendPasswordResetEmail = recipientEmail => {
     const mailOptions = {
-        from: '93ave.blues@gmail.com',
+        from: NODEMAILER_EMAIL,
         to: recipientEmail,
         subject: 'Password Reset',
         text: 'You are receiving this because yuo (or someone else) have requested the reset of the password for your PetPal account'
@@ -78,7 +80,11 @@ const sendPasswordRestEmail = (recipientEmail, resetToken) => {
     })
 };
 
+exports.sendPasswordResetEmail = sendPasswordResetEmail;
+
 exports.initiatePasswordReset = async (req, res) => {
+    const TOKEN_EXPIRATION_TIME = 3600000; // 1 hour
+
     try {
         const { email } = req.body;
         const user = await User.findOne({ email });
@@ -89,10 +95,10 @@ exports.initiatePasswordReset = async (req, res) => {
 
         const resetToken = crypto.randomBytes(20).toString('hex');
         user.resetPasswordToken = resetToken;
-        user.resetPasswordExpires = Date.now() + 3600000; // Token expires in one hour
+        user.resetPasswordExpires = Date.now() + TOKEN_EXPIRATION_TIME;
         await user.save();
 
-        sendPasswordRestEmail(email, resetToken);
+        sendPasswordResetEmail(email, resetToken);
     } catch (e) {
         console.error('Error log in user:', e);
         res.status(500).json({ error: 'Internal server error' });
@@ -115,10 +121,6 @@ exports.handlePasswordReset = async (req, res) => {
         user.resetPasswordToken = undefined;
         user.resetPasswordToken = undefined;
         await user.save();
-
-        // Send a confirmation email to the user
-        // Code for sending the email goes here
-
     } catch (e) {
         console.error('Handle password reset error:', e);
         res.status(500).json({ error: 'Internal server error' });
