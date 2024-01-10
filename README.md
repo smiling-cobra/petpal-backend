@@ -6,7 +6,3 @@
 4. Run tests `docker-compose run --rm test`
 
 The -d flag runs the containers in detached mode, allowing them to continue running in the background.
-
-
-
-
