@@ -1,14 +1,12 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const generateToken = require('../services/tokenService');
-const mongoose = require('mongoose');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
 const NODEMAILER_PASSWORD = process.env.NODEMAILER_PASSWORD;
 
-const ObjectId = mongoose.Types.ObjectId;
 
 exports.registerUser = async (req, res) => {
     try {
@@ -16,7 +14,6 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
-            _id: new ObjectId(),
             username,
             password: hashedPassword,
             email,
